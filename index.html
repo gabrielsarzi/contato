@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    <button class="theme-toggle"><i class="fas fa-sun"></i></button>
+    <button class="theme-toggle" aria-label="Alternar tema"><i class="fas fa-sun"></i></button>
     <canvas id="particles-canvas"></canvas>
 
     <div class="container">
@@ -29,20 +29,42 @@
         <section class="about-section">
             <div class="about-content">
                 <h2><i class="fas fa-paper-plane"></i> Envie uma mensagem</h2>
-                <form action="mailto:gabrielsarzilima@gmail.com" method="POST" enctype="text/plain" class="contact-form">
-                    <input type="text" name="Nome" placeholder="Seu nome" required>
-                    <input type="email" name="Email" placeholder="Seu e-mail" required>
-                    <select name="Assunto" required>
-                        <option value="">Selecione um assunto</option>
-                        <option value="Sugestão de Curso">Sugestão de Curso</option>
-                        <option value="Erro em Link ou Página">Erro em Link ou Página</option>
-                        <option value="Parcerias ou Apoio">Parcerias ou Apoio</option>
-                        <option value="Outros">Outros</option>
-                    </select>
-                    <textarea name="Mensagem" placeholder="Escreva sua mensagem aqui..." rows="6" required></textarea>
+                <form id="contact-form" class="contact-form" novalidate>
+                    <div class="form-group">
+                        <label for="name">Nome</label>
+                        <input type="text" id="name" name="name" placeholder="Seu nome" required aria-describedby="name-error">
+                        <span id="name-error" class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email" placeholder="Seu e-mail" required aria-describedby="email-error">
+                        <span id="email-error" class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Assunto</label>
+                        <select id="subject" name="subject" required aria-describedby="subject-error">
+                            <option value="">Selecione um assunto</option>
+                            <option value="Sugestão de Curso">Sugestão de Curso</option>
+                            <option value="Erro em Link ou Página">Erro em Link ou Página</option>
+                            <option value="Parcerias ou Apoio">Parcerias ou Apoio</option>
+                            <option value="Outros">Outros</option>
+                        </select>
+                        <span id="subject-error" class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Mensagem</label>
+                        <textarea id="message" name="message" placeholder="Escreva sua mensagem aqui..." rows="6" required aria-describedby="message-error"></textarea>
+                        <span id="message-error" class="error-message"></span>
+                    </div>
+                    <div class="form-group consent-group">
+                        <input type="checkbox" id="consent" name="consent" required aria-describedby="consent-error">
+                        <label for="consent">Concordo com o armazenamento dos meus dados para resposta desta mensagem</label>
+                        <span id="consent-error" class="error-message"></span>
+                    </div>
                     <button type="submit" class="course-btn">
                         <i class="fas fa-paper-plane"></i> Enviar Mensagem
                     </button>
+                    <div id="form-message" class="form-message"></div>
                 </form>
             </div>
         </section>
