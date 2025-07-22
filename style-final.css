@@ -1,0 +1,70 @@
+/* Estilo da seção de contato */
+.contact-section {
+    background: rgba(40, 40, 40, 0.8);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid #444;
+}
+
+/* Inputs, textarea e select */
+.contact-section input,
+.contact-section textarea,
+.contact-section select {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #555;
+    background: rgba(40, 40, 40, 0.8);
+    color: #fff;
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.contact-section input::placeholder,
+.contact-section textarea::placeholder {
+    color: #888;
+}
+
+.contact-section input:focus,
+.contact-section textarea:focus,
+.contact-section select:focus {
+    border-color: #777;
+    background: rgba(40, 40, 40, 1);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Botão de envio */
+.contact-section button[type="submit"],
+.contact-section .course-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #555, #777);
+    color: white;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.contact-section button[type="submit"]:hover {
+    background: linear-gradient(135deg, #666, #888);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .contact-section {
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+}
