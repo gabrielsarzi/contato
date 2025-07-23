@@ -17,7 +17,6 @@ class ParticleNetwork {
             mouseRadius: 150
         };
         
-        this.isDarkMode = localStorage.getItem('theme') === 'dark'; // Sincroniza com script.js
         this.init();
     }
     
@@ -25,14 +24,7 @@ class ParticleNetwork {
         this.createCanvas();
         this.createParticles();
         this.bindEvents();
-        this.startAnimation(); // Inicia animação explicitamente
-        
-        // Escuta evento personalizado disparado pelo script.js
-        window.addEventListener('themeChanged', (e) => {
-            this.isDarkMode = e.detail.isDarkMode;
-            this.createParticles(); // Recria partículas com a nova cor
-            this.startAnimation(); // Reinicia animação após troca de tema
-        });
+        this.startAnimation();
     }
     
     createCanvas() {
@@ -41,13 +33,15 @@ class ParticleNetwork {
         this.ctx = this.canvas.getContext('2d');
         document.body.appendChild(this.canvas);
         this.resizeCanvas();
-        this.canvas.style.pointerEvents = 'none'; // Evita interferência na rolagem
+        this.canvas.style.background = '#1a1a1a';
+        this.canvas.style.pointerEvents = 'none';
+        this.canvas.style.zIndex = '-1';
     }
     
     resizeCanvas() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        this.createParticles(); // Recria partículas ao redimensionar
+        this.createParticles();
     }
     
     createParticles() {
@@ -107,7 +101,7 @@ class ParticleNetwork {
                 this.ctx.moveTo(particle.x, particle.y);
                 this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
             });
-            this.ctx.fillStyle = this.isDarkMode ? `rgba(255, 255, 255, ${this.settings.particleOpacity})` : `rgba(0, 0, 0, ${this.settings.particleOpacity})`;
+            this.ctx.fillStyle = `rgba(255, 255, 255, ${this.settings.particleOpacity})`;
             this.ctx.fill();
         }
     }
@@ -125,7 +119,7 @@ class ParticleNetwork {
                         this.ctx.beginPath();
                         this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
                         this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
-                        this.ctx.strokeStyle = this.isDarkMode ? `rgba(255, 255, 255, ${opacity})` : `rgba(0, 0, 0, ${opacity})`;
+                        this.ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
                         this.ctx.lineWidth = 1;
                         this.ctx.stroke();
                     }
