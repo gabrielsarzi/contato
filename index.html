@@ -3,14 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contato - Cursos Gratuitos</title>
+    <title>Contato - Hub de Ferramentas</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="style-final.css" id="dark-stylesheet" disabled>
     <link rel="icon" href="favicon.ico" id="favicon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
-    <button class="theme-toggle" aria-label="Alternar tema"><i class="fas fa-sun"></i></button>
+    <button class="menu-toggle" aria-label="Abrir menu"><i class="fas fa-bars"></i></button>
+    <div class="menu-overlay" id="menu-overlay">
+        <div class="menu-content">
+            <button class="menu-close" aria-label="Fechar menu"><i class="fas fa-times"></i></button>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
     <canvas id="particles-canvas"></canvas>
 
     <div class="container">
@@ -44,9 +55,10 @@
                         <label for="subject">Assunto</label>
                         <select id="subject" name="subject" required aria-describedby="subject-error">
                             <option value="">Selecione um assunto</option>
-                            <option value="Sugestão de Curso">Sugestão de Curso</option>
-                            <option value="Erro em Link ou Página">Erro em Link ou Página</option>
+                            <option value="Sugestão">Sugestão</option>
+                            <option value="Erro">Erro</option>
                             <option value="Parcerias ou Apoio">Parcerias ou Apoio</option>
+                            <option value="Cursos">Cursos</option>
                             <option value="Outros">Outros</option>
                         </select>
                         <span id="subject-error" class="error-message"></span>
@@ -72,8 +84,7 @@
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-content">
-                <p><i class="fas fa-heart"></i> Desenvolvido para democratizar o acesso ao conhecimento</p>
-                <p>Se encontrou algum erro ou quer sugerir um curso, entre em contato pelo formulário acima</p>
+                <p><i class="fas fa-heart"></i> Um hub de ferramentas gratuitas para todos. Encontrou um erro ou tem sugestões? Use o formulário de contato!</p>
                 <div class="update-info">
                     <p><i class="fas fa-envelope-open-text"></i> <strong>Email:</strong> gabrielsarzilima@gmail.com</p>
                 </div>
