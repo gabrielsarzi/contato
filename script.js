@@ -26,90 +26,124 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe all category sections and about sections
-document.querySelectorAll('.category-section, .about-section').forEach(section => {
+// Observe all sections
+document.querySelectorAll('.about-section').forEach(section => {
     observer.observe(section);
 });
 
-// Add loading animation to course cards
+// Contact form validation and submission with EmailJS
 document.addEventListener('DOMContentLoaded', function() {
-    const cards = document.querySelectorAll('.course-card');
-    
-    cards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        
-        setTimeout(() => {
-            card.style.transition = 'all 0.6s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * 100);
-    });
-});
+    // Initialize EmailJS
+    (function(){
+        emailjs.init("uyX9uHWiUpeUfV2Y2");
+    })();
 
-// Track course button clicks
-document.querySelectorAll('.course-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        const courseName = this.closest('.course-card').querySelector('h3').textContent;
-        
-        // Add click animation
-        this.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            this.style.transform = '';
-        }, 150);
-        
-        // Optional: Track analytics
-        console.log(`Curso acessado: ${courseName}`);
-    });
-});
-
-// Add hover effects to course cards
-document.querySelectorAll('.course-card').forEach(card => {
-    card.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-10px) scale(1.02)';
-    });
-    
-    card.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0) scale(1)';
-    });
-});
-
-// Parallax effect for header
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const header = document.querySelector('.header');
-    
-    if (header) {
-        header.style.transform = `translateY(${scrolled * 0.5}px)`;
-        header.style.opacity = Math.max(0, 1 - scrolled / 400);
+    const form = document.getElementById('contact-form');
+    if (form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(error => {
+                error.textContent = '';
+                error.classList.remove('active');
+            });
+            const formMessage = document.getElementById('form-message');
+            formMessage.textContent = '';
+            formMessage.classList.remove('success', 'error');
+            
+            // Get form values
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value.trim();
+            const consent = document.getElementById('consent').checked;
+            
+            let isValid = true;
+            
+            // Validation
+            if (!name) {
+                document.getElementById('name-error').textContent = 'Por favor, insira seu nome';
+                document.getElementById('name-error').classList.add('active');
+                isValid = false;
+            }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                document.getElementById('email-error').textContent = 'Por favor, insira um e-mail válido';
+                document.getElementById('email-error').classList.add('active');
+                isValid = false;
+            }
+            if (!subject) {
+                document.getElementById('subject-error').textContent = 'Por favor, selecione um assunto';
+                document.getElementById('subject-error').classList.add('active');
+                isValid = false;
+            }
+            if (!message || message.length < 10) {
+                document.getElementById('message-error').textContent = 'A mensagem deve ter pelo menos 10 caracteres';
+                document.getElementById('message-error').classList.add('active');
+                isValid = false;
+            }
+            if (!consent) {
+                document.getElementById('consent-error').textContent = 'Você deve concordar com o armazenamento dos dados';
+                document.getElementById('consent-error').classList.add('active');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                try {
+                    const response = await emailjs.sendForm(
+                        'service_64zigrx',
+                        'template_cf36lbu',
+                        form,
+                        'uyX9uHWiUpeUfV2Y2'
+                    );
+                    
+                    formMessage.textContent = 'Mensagem enviada com sucesso! Entraremos em contato em breve.';
+                    formMessage.classList.add('success');
+                    form.reset();
+                } catch (error) {
+                    formMessage.textContent = 'Ocorreu um erro ao enviar a mensagem. Tente novamente mais tarde.';
+                    formMessage.classList.add('error');
+                    console.error('Erro ao enviar:', error);
+                }
+            }
+            
+            // Button animation
+            const submitBtn = form.querySelector('.course-btn');
+            submitBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                submitBtn.style.transform = '';
+            }, 150);
+        });
     }
 });
 
-// Search functionality
+// Menu toggle functionality
 document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('courseSearch');
-    if (searchInput) {
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const courseCards = document.querySelectorAll('.course-card');
-            
-            courseCards.forEach(card => {
-                const title = card.querySelector('h3').textContent.toLowerCase();
-                const description = card.querySelector('p').textContent.toLowerCase();
-                
-                if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                    card.style.display = 'block';
-                    card.style.opacity = '1';
-                } else {
-                    card.style.display = searchTerm === '' ? 'block' : 'none';
-                }
+    const menuToggle = document.querySelector('.menu-toggle');
+    const menuOverlay = document.querySelector('#menu-overlay');
+    const menuClose = document.querySelector('.menu-close');
+
+    if (menuToggle && menuOverlay && menuClose) {
+        menuToggle.addEventListener('click', () => {
+            menuOverlay.classList.add('active');
+        });
+
+        menuClose.addEventListener('click', () => {
+            menuOverlay.classList.remove('active');
+        });
+
+        // Close menu when clicking a link
+        menuOverlay.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuOverlay.classList.remove('active');
             });
-            
-            // Hide/show category sections based on visible cards
-            document.querySelectorAll('.category-section, .about-section').forEach(section => {
-                const visibleCards = section.querySelectorAll('.course-card[style*="display: block"], .course-card:not([style*="display: none"])');
-                section.style.display = visibleCards.length > 0 || searchTerm === '' ? 'block' : 'none';
-            });
+        });
+
+        // Close menu when clicking outside
+        menuOverlay.addEventListener('click', (e) => {
+            if (e.target === menuOverlay) {
+                menuOverlay.classList.remove('active');
+            }
         });
     }
 });
@@ -153,65 +187,3 @@ function createBackToTopButton() {
 
 // Initialize back to top button
 document.addEventListener('DOMContentLoaded', createBackToTopButton);
-
-// Theme toggle functionality
-function initializeThemeToggle() {
-    const themeToggleBtn = document.querySelector('.theme-toggle');
-    const lightStylesheet = document.querySelector('link[href="style.css"]');
-    const darkStylesheet = document.querySelector('#dark-stylesheet');
-    const favicon = document.getElementById('favicon');
-
-    // Check for saved theme preference
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    themeToggleBtn.querySelector('i').classList.remove('fa-sun', 'fa-moon');
-    if (savedTheme === 'dark') {
-        darkStylesheet.disabled = false;
-        lightStylesheet.disabled = true;
-        themeToggleBtn.querySelector('i').classList.add('fa-moon');
-        favicon.href = 'favicon-dark.ico';
-    } else {
-        darkStylesheet.disabled = true;
-        lightStylesheet.disabled = false;
-        themeToggleBtn.querySelector('i').classList.add('fa-sun');
-        favicon.href = 'favicon.ico';
-    }
-
-    themeToggleBtn.addEventListener('click', () => {
-        const isDarkMode = themeToggleBtn.querySelector('i').classList.contains('fa-moon');
-        
-        if (isDarkMode) {
-            // Switch to light mode
-            lightStylesheet.disabled = false;
-            darkStylesheet.disabled = true;
-            themeToggleBtn.querySelector('i').classList.replace('fa-moon', 'fa-sun');
-            favicon.href = 'favicon.ico';
-            localStorage.setItem('theme', 'light');
-        } else {
-            // Switch to dark mode
-            lightStylesheet.disabled = true;
-            darkStylesheet.disabled = false;
-            themeToggleBtn.querySelector('i').classList.replace('fa-sun', 'fa-moon');
-            favicon.href = 'favicon-dark.ico';
-            localStorage.setItem('theme', 'dark');
-        }
-        
-        // Força recarregamento dos estilos
-        document.body.style.transition = 'none';
-        setTimeout(() => {
-            document.body.style.transition = 'background 0.3s ease, color 0.3s ease';
-        }, 50);
-        
-        // Dispara evento para partículas
-        const event = new CustomEvent('themeChanged', { detail: { isDarkMode: !isDarkMode } });
-        window.dispatchEvent(event);
-        
-        // Animação de clique
-        themeToggleBtn.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            themeToggleBtn.style.transform = 'scale(1)';
-        }, 150);
-    });
-}
-
-// Initialize theme toggle
-document.addEventListener('DOMContentLoaded', initializeThemeToggle);
